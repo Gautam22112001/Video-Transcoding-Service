@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_sqs_1 = require("@aws-sdk/client-sqs");
 const client_ecs_1 = require("@aws-sdk/client-ecs");
 const client = new client_sqs_1.SQSClient({
-  region: "ap-south-1",
+  region: "your-region",
   credentials: {
     credentials: {
       accessKeyId: process.env.ACCESS_KEY_ID || "",
@@ -45,7 +45,7 @@ const client = new client_sqs_1.SQSClient({
   },
 });
 const ecsClient = new client_ecs_1.ECSClient({
-  region: "ap-south-1",
+  region: "your-region",
   credentials: {
     accessKeyId: process.env.ACCESS_KEY_ID || "",
     secretAccessKey: process.env.SECRET_ACCESS_KEY || "",
