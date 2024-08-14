@@ -12,10 +12,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const s3Client = new S3Client({
-  region: "your-region",
+  region: "",
   credentials: {
-    accessKeyId: "sample-key",
-    secretAccessKey: "sample-key",
+    accessKeyId: "",
+    secretAccessKey: "",
   },
 });
 
