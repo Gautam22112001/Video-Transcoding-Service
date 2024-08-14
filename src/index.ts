@@ -12,16 +12,16 @@ dotenv.config();
 const client = new SQSClient({
   region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: ?process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
 const ecsClient = new ECSClient({
-  region: "",
+  region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: "",
-    secretAccessKey: "",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
@@ -45,10 +45,10 @@ async function init() {
         console.log(`Message Recieved`, { MessageId, Body });
         if (!Body) continue;
 
-        //validate and parse the event
+        // Validate and parse the event
         const event = JSON.parse(Body) as S3Event;
 
-        //Ignore the test event
+        // Ignore the test event
         if ("Service" in event && "Event" in event) {
           if (event.Event === "s3.TestEvent") {
             await client.send(
@@ -60,6 +60,7 @@ async function init() {
             continue;
           }
         }
+
         for (const record of event.Records) {
           const { s3 } = record;
           const {
@@ -67,7 +68,7 @@ async function init() {
             object: { key },
           } = s3;
 
-          //Spin the docker container
+          // Spin the docker container
           const runTaskCommand = new RunTaskCommand({
             taskDefinition:
               "arn:aws:ecs:ap-south-1:691654398267:task-definition/video-transcoder",
@@ -102,9 +103,10 @@ async function init() {
               ],
             },
           });
+
           await ecsClient.send(runTaskCommand);
 
-          //Delete message from queue
+          // Delete message from queue
           await client.send(
             new DeleteMessageCommand({
               QueueUrl: process.env.QUEUE_URL,

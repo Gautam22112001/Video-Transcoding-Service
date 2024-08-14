@@ -7,15 +7,14 @@ import * as fs from "node:fs/promises";
 import * as fsOld from "node:fs";
 import path from "node:path";
 import ffmpeg from "fluent-ffmpeg";
-
 import dotenv from "dotenv";
 dotenv.config();
 
 const s3Client = new S3Client({
-  region: "",
+  region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: "",
-    secretAccessKey: "",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
@@ -23,7 +22,7 @@ const s3Client = new S3Client({
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const KEY = process.env.KEY;
 
-//Download the raw video
+// Download the raw video
 async function init() {
   const command = new GetObjectCommand({
     Bucket: BUCKET_NAME,
@@ -57,7 +56,7 @@ async function init() {
         .on("end", async () => {
           // Upload the video
           const putCommand = new PutObjectCommand({
-            Bucket: "gautammanocha22112001-video-output",
+            Bucket: process.env.OUTPUT_BUCKET_NAME,
             Key: output,
             Body: fsOld.createReadStream(path.resolve(output)),
           });
