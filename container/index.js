@@ -8,11 +8,14 @@ import * as fsOld from "node:fs";
 import path from "node:path";
 import ffmpeg from "fluent-ffmpeg";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const s3Client = new S3Client({
   region: "ap-south-1",
   credentials: {
-    accessKeyId: "AKIA2CCOQSE5VOLZ3MOD",
-    secretAccessKey: "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",
+    accessKeyId: process.env.ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.SECRET_ACCESS_KEY || "",
   },
 });
 

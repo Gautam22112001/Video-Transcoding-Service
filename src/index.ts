@@ -6,26 +6,28 @@ import {
 import { ECSClient, RunTaskCommand } from "@aws-sdk/client-ecs";
 import { S3Event } from "aws-lambda";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const client = new SQSClient({
   region: "ap-south-1",
   credentials: {
-    accessKeyId: "AKIA2CCOQSE5VOLZ3MOD",
-    secretAccessKey: "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",
+    accessKeyId: process.env.ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.SECRET_ACCESS_KEY || "",
   },
 });
 
 const ecsClient = new ECSClient({
   region: "ap-south-1",
   credentials: {
-    accessKeyId: "AKIA2CCOQSE5VOLZ3MOD",
-    secretAccessKey: "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",
+    accessKeyId: process.env.ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.SECRET_ACCESS_KEY || "",
   },
 });
 
 async function init() {
   const command = new ReceiveMessageCommand({
-    QueueUrl:
-      "https://sqs.ap-south-1.amazonaws.com/691654398267/gautammanocha22112001-raw-video-queue",
+    QueueUrl: process.env.QUEUE_URL,
     MaxNumberOfMessages: 1,
     WaitTimeSeconds: 20,
   });
@@ -51,8 +53,7 @@ async function init() {
           if (event.Event === "s3.TestEvent") {
             await client.send(
               new DeleteMessageCommand({
-                QueueUrl:
-                  "https://sqs.ap-south-1.amazonaws.com/691654398267/gautammanocha22112001-raw-video-queue",
+                QueueUrl: process.env.QUEUE_URL,
                 ReceiptHandle: message.ReceiptHandle,
               })
             );
@@ -106,8 +107,7 @@ async function init() {
           //Delete message from queue
           await client.send(
             new DeleteMessageCommand({
-              QueueUrl:
-                "https://sqs.ap-south-1.amazonaws.com/691654398267/gautammanocha22112001-raw-video-queue",
+              QueueUrl: process.env.QUEUE_URL,
               ReceiptHandle: message.ReceiptHandle,
             })
           );
