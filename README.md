@@ -1,6 +1,7 @@
 
 This repository contains the code and setup instructions for a scalable video processing pipeline. The pipeline is designed to handle video uploads, validation, and processing using AWS services and containerized applications.
-![image](https://github.com/user-attachments/assets/ffeb909f-e7c9-44ab-bff3-e08d118d4365)
+![image](https://github.com/user-attachments/assets/7c87809e-9ac4-469b-84bb-2e174933f5c2)
+
 
 ## Overview
 The pipeline consists of the following steps:
